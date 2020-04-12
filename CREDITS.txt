@@ -1,0 +1,2 @@
+The biome icons are taken from the Minecraft wiki, specifically this file:
+https://gamepedia.cursecdn.com/minecraft_gamepedia/5/59/BiomeCSS.png
