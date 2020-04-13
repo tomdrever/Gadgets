@@ -13,7 +13,7 @@ public class GuiRenderHandler {
     }
 
     @SubscribeEvent
-    public void onRenderGui(RenderGameOverlayEvent.Post event) {
+    public void onRenderGui(RenderGameOverlayEvent.Text event) {
         // If the gui is set to hide when the debug info is shown, only render when it isn't shown.
         // Otherwise, just render always
         if (Config.CLIENT.hideWhenDebugShown.get()) {

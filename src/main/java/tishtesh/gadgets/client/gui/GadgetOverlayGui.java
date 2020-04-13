@@ -25,8 +25,8 @@ public class GadgetOverlayGui extends AbstractGui {
 
     private final Minecraft mc;
 
-    public final static int BackgroundColour = Integer.parseInt("8000000", 16);
-    public final static int TextColour = Integer.parseInt("FFFFFF", 16);
+    public static int BackgroundColour = 0x40000000;
+    public final static int TextColour = 0xFFFFFFFF;
 
     public final static float SmallTextSF = 0.9f;
 
@@ -47,9 +47,6 @@ public class GadgetOverlayGui extends AbstractGui {
     }
 
     public void render() {
-        RenderSystem.pushMatrix();
-        RenderSystem.disableBlend();
-
         Position position = getRenderStartPos();
 
         if (Config.CLIENT.needCurios.get()) {
@@ -71,9 +68,6 @@ public class GadgetOverlayGui extends AbstractGui {
                 renderGadgetGui(gadgetGuiItem, position);
             }
         }
-
-        RenderSystem.enableBlend();
-        RenderSystem.popMatrix();
     }
 
     /**
@@ -108,13 +102,19 @@ public class GadgetOverlayGui extends AbstractGui {
         if (!displayItemsFromTop())
             position.y -= gadgetGuiItem.getHeight();
 
+        RenderSystem.pushMatrix();
+
         // Shade gui item background for visibility (if enabled in config)
         if (Config.CLIENT.gadgetGuiBackground.get())
+            RenderSystem.enableAlphaTest();
             fill(position.x,position.y + gadgetGuiItem.getHeight(),
                     position.x + gadgetGuiItem.getWidth(), position.y,
                     GadgetOverlayGui.BackgroundColour);
+            RenderSystem.disableAlphaTest();
 
         gadgetGuiItem.render(mc, this, position.x, position.y);
+
+        RenderSystem.popMatrix();
 
         // Render next item below if gadgetGuiPosition is along the top, render next item above if along the bottom
         if (displayItemsFromTop())
