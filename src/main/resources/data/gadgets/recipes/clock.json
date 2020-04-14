@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " i ",
+    "ici",
+    " n "
+  ],
+  "key": {
+    "i":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "c":
+    {
+      "item": "minecraft:clock"
+    },
+    "n":
+    {
+      "item": "minecraft:gold_nugget"
+    }
+  },
+  "result": {
+    "item": "gadgets:clock"
+  }
+}

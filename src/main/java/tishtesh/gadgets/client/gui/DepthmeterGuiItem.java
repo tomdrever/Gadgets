@@ -11,12 +11,11 @@ public class DepthmeterGuiItem extends GadgetGuiItem{
 
     @Override
     protected void render(Minecraft mc, GadgetOverlayGui gui, int x, int y) {
-        // Draw depthmeter icon
+        int width = getWidth();
         if (Config.CLIENT.gadgetGuiIcons.get()) {
             gui.drawTexture(Icons.DepthmeterGuiIcon, x + 1, y + 1, 18, 18);
+            width += 18;
         }
-
-        int width = Config.CLIENT.gadgetGuiIcons.get() ? getWidth() + 18: getWidth();
 
         // Get coordinate string
         String depth = String.format("%.0f", mc.getRenderViewEntity().getPosY());

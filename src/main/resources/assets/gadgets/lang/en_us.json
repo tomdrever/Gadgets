@@ -2,5 +2,6 @@
   "item.gadgets.compass": "Personal Compass",
   "item.gadgets.depthmeter": "Depthmeter",
   "item.gadgets.biometer": "Biometer",
+  "item.gadgets.clock": "Timepiece",
   "curios.identifier.gadget": "Gadget"
 }

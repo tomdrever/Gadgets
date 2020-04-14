@@ -16,12 +16,11 @@ public class CompassGuiItem extends GadgetGuiItem {
 
     @Override
     protected void render(Minecraft mc, GadgetOverlayGui gui, int x, int y) {
-        // Draw compass rose icon
+        int width = getWidth();
         if (Config.CLIENT.gadgetGuiIcons.get()) {
             gui.drawTexture(Icons.CompassGuiIcon, x + 1, y + (getHeight() / 2) - 9,  18, 18);
+            width += 18;
         }
-
-        int width = Config.CLIENT.gadgetGuiIcons.get() ? getWidth() + 18: getWidth();
 
         // Get the name of the direction the player is facing
         String directionFacing = mc.getRenderViewEntity().getHorizontalFacing().getName();
@@ -30,7 +29,7 @@ public class CompassGuiItem extends GadgetGuiItem {
 
         // Draw direction text
         mc.fontRenderer.drawStringWithShadow(directionFacing, x + 1 + width / 2F - mc.fontRenderer.getStringWidth(directionFacing) / 2F,
-                y + 2, GadgetOverlayGui.TextColour);
+                y + 3, GadgetOverlayGui.TextColour);
 
         // Get coordinates
         String coordinates = String.format("%.0f %.0f", mc.getRenderViewEntity().getPosX(), mc.getRenderViewEntity().getPosZ());
@@ -38,7 +37,7 @@ public class CompassGuiItem extends GadgetGuiItem {
         // Draw coordinates (scaled to be smaller)
         RenderSystem.pushMatrix();
         GL11.glScalef(GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.SmallTextSF);
-        mc.fontRenderer.drawStringWithShadow(coordinates, (x + 1 + width / 2F - (mc.fontRenderer.getStringWidth(coordinates)) / 2F) / GadgetOverlayGui.SmallTextSF,
+        mc.fontRenderer.drawStringWithShadow(coordinates, (x + 2 + width / 2F - mc.fontRenderer.getStringWidth(coordinates) / 2F) / GadgetOverlayGui.SmallTextSF,
                 (y + 1 + getHeight() * 0.55F) / GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.TextColour);
         RenderSystem.popMatrix();
     }

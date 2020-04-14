@@ -44,6 +44,7 @@ public class GadgetOverlayGui extends AbstractGui {
         gadgetGuiItems.put("compass", new CompassGuiItem());
         gadgetGuiItems.put("depthmeter", new DepthmeterGuiItem());
         gadgetGuiItems.put("biometer", new BiometerGuiItem());
+        gadgetGuiItems.put("clock", new ClockGuiItem());
     }
 
     public void render() {

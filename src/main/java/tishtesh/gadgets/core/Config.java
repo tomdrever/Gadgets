@@ -23,6 +23,8 @@ public class Config {
         public final ForgeConfigSpec.IntValue gadgetGuiWidth;
         public final ForgeConfigSpec.BooleanValue hideWhenDebugShown;
 
+        public final ForgeConfigSpec.BooleanValue clockGadget24Hour;
+
         public final ForgeConfigSpec.BooleanValue needCurios;
         public final ForgeConfigSpec.IntValue gadgetSlots;
 
@@ -50,17 +52,21 @@ public class Config {
                     .translation(Gadgets.MOD_ID + ".config.hideWhenDebugShown")
                     .define("hideWhenDebugShown", true);
 
+            clockGadget24Hour = builder
+                    .comment("Display the clock gadget gui in 24 hour (true) or 12 hour (false) format")
+                    .translation(Gadgets.MOD_ID + ".config.clockGadget24Hour")
+                    .define("clockGadget24Hour", true);
+
             needCurios = builder
                     .comment("If enabled, a player needs each gadget equipped for its gadget gui to be rendered. If disabled, a player " +
                             "just gets all gui items by default")
                     .translation(Gadgets.MOD_ID + ".config.needCurios")
                     .define("needCurios", true);
-
             gadgetSlots = builder
                     .comment("The number of slots for gadgets the player has")
                     .translation(Gadgets.MOD_ID + ".config.gadgetSlots")
                     .worldRestart()
-                    .defineInRange("gadgetSlots", 3, 0, 5);
+                    .defineInRange("gadgetSlots", 4, 0, 5);
 
             builder.pop();
         }

@@ -23,12 +23,13 @@ public class BiometerGuiItem extends GadgetGuiItem {
         Biome biome = mc.world.getBiome(blockpos);
         String biomeName = biome.getDisplayName().getString();
 
+        int width = getWidth();
+
         // Draw biome icon
         if (Config.CLIENT.gadgetGuiIcons.get()) {
-            gui.drawTexture(gui.getBiomeIconResourceLocation(biome), x + 1, y + 1,  18, 18); ;
+            gui.drawTexture(gui.getBiomeIconResourceLocation(biome), x + 1, y + 1,  18, 18);
+            width += 18;
         }
-
-        int width = Config.CLIENT.gadgetGuiIcons.get() ? getWidth() + 18: getWidth();
 
         // Draw biome name
 
@@ -43,9 +44,9 @@ public class BiometerGuiItem extends GadgetGuiItem {
             // Render small
             RenderSystem.pushMatrix();
             GL11.glScalef(GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.SmallTextSF);
-            mc.fontRenderer.drawStringWithShadow(firstPart, (x + 1 + width / 2F - (mc.fontRenderer.getStringWidth(firstPart)) / 2F) / GadgetOverlayGui.SmallTextSF,
+            mc.fontRenderer.drawStringWithShadow(firstPart, (x + 2 + width / 2F - mc.fontRenderer.getStringWidth(firstPart) / 2F) / GadgetOverlayGui.SmallTextSF,
                     (y + 1 + (getHeight() * 0.3F - mc.fontRenderer.FONT_HEIGHT / 2F)) / GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.TextColour);
-            mc.fontRenderer.drawStringWithShadow(secondPart, (x + 1 + width / 2F - (mc.fontRenderer.getStringWidth(secondPart)) / 2F) / GadgetOverlayGui.SmallTextSF,
+            mc.fontRenderer.drawStringWithShadow(secondPart, (x + 2 + width / 2F - mc.fontRenderer.getStringWidth(secondPart) / 2F) / GadgetOverlayGui.SmallTextSF,
                     (y + 1 + (getHeight() * 0.7F - mc.fontRenderer.FONT_HEIGHT / 2F)) / GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.TextColour);
             RenderSystem.popMatrix();
         }

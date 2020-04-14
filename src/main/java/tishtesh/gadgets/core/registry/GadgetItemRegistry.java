@@ -15,4 +15,5 @@ public class GadgetItemRegistry {
     public static RegistryObject<Item> COMPASS = ITEMS.register("compass", GadgetItem::new);
     public static RegistryObject<Item> DEPTHMETER = ITEMS.register("depthmeter", GadgetItem::new);
     public static RegistryObject<Item> BIOMETER = ITEMS.register("biometer", GadgetItem::new);
+    public static RegistryObject<Item> CLOCK = ITEMS.register("clock", GadgetItem::new);
 }
