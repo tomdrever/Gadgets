@@ -11,7 +11,7 @@ Config options also let you change the position of the gadget gui, and whether y
 
 The biome icons are taken (and adapted) from the Minecraft Wiki, specifically [this file](https://gamepedia.cursecdn.com/minecraft_gamepedia/5/59/BiomeCSS.png).
 
-Supports custom biomes - just put an icon in `assets/gadgets/textures/gui/biome_icons/MOD_ID/BIOME_NAME.png`
+Supports custom biomes - just put an 18*18 icon in your mod/resource pack in `assets/gadgets/textures/gui/biome_icons/MOD_ID/BIOME_NAME.png`. The mod comes with icons for the biomes from [The Endergetic Expansion](https://www.curseforge.com/minecraft/mc-mods/endergetic) and [Autumnity](https://www.curseforge.com/minecraft/mc-mods/autumnity), with hopefully more mod integration to come.
 
 *NOTE: if an update adds a new gadget, you may want to increase the config option for number of curio slots, as the default is the number of gadgets and the file won't update between versions.*
 

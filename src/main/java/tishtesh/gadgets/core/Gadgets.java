@@ -8,11 +8,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import tishtesh.gadgets.client.gui.GuiRenderHandler;
@@ -29,28 +29,25 @@ public class Gadgets
     private static GuiRenderHandler guiRenderHandler;
 
     public Gadgets() {
-        guiRenderHandler = new GuiRenderHandler();
-
-        // Register the setup method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         // Register the enqueueIMC method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
 
-        GadgetItemRegistry.ITEMS.register( FMLJavaModLoadingContext.get().getModEventBus());
+        GadgetItemRegistry.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(guiRenderHandler);
+
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+            guiRenderHandler = new GuiRenderHandler();
+            MinecraftForge.EVENT_BUS.register(guiRenderHandler);
+
+            // Use reduced debug info by default (can still be changed in settings)
+            Minecraft.getInstance().gameSettings.reducedDebugInfo = true;
+        });
 
         // Register client and common configs
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
         modLoadingContext.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC);
-    }
-
-    private void setup(final FMLCommonSetupEvent event)
-    {
-        // Use reduced debug info by default (can still be changed in settings)
-        Minecraft.getInstance().gameSettings.reducedDebugInfo = true;
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)
