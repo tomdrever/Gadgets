@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " i ",
+    "igi",
+    " n "
+  ],
+  "key":
+  {
+    "i":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "g":
+    {
+      "item": "minecraft:glass"
+    },
+    "n":
+    {
+      "item": "minecraft:gold_nugget"
+    }
+  },
+  "result":
+  {
+    "item": "gadgets:depthmeter"
+  }
+}

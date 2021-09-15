@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " i ",
+    "iri",
+    " n "
+  ],
+  "key": {
+    "i":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "r":
+    {
+      "item": "minecraft:redstone"
+    },
+    "n":
+    {
+      "item": "minecraft:gold_nugget"
+    }
+  },
+  "result": {
+    "item": "gadgets:compass"
+  }
+}
