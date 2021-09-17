@@ -17,7 +17,7 @@ public class GuiRenderHandler {
         // If the gui is set to hide when the debug info is shown, only render when it isn't shown.
         // Otherwise, just render always
         if (Config.CLIENT.hideWhenDebugShown.get()) {
-            if (!Minecraft.getInstance().options.reducedDebugInfo)
+            if (!Minecraft.getInstance().options.renderDebug)
                 gui.render(event.getMatrixStack());
         } else {
             gui.render(event.getMatrixStack());

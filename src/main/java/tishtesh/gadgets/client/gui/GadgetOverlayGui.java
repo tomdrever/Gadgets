@@ -3,45 +3,37 @@ package tishtesh.gadgets.client.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
+import tishtesh.gadgets.common.item.GadgetItem;
 import tishtesh.gadgets.core.Config;
 import tishtesh.gadgets.core.Gadgets;
 import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 public class GadgetOverlayGui extends AbstractGui {
-
-    private final Minecraft minecraft;
-
     public static int BackgroundColour = 0x40000000;
     public final static int TextColour = 0xFFFFFFFF;
 
     public final static float SmallTextSF = 0.9f;
 
-    private final HashMap<String, GadgetGuiItem> gadgetGuiItems;
-
+    private final Minecraft minecraft;
     private final HashMap<ResourceLocation, ResourceLocation> biomeResourceMap;
+
+    private final GadgetGuiItem[] allGadgetGuiItems = new GadgetGuiItem[] {
+            new CompassGuiItem(), new DepthmeterGuiItem(), new BiometerGuiItem(), new ClockGuiItem()
+    };
 
     public GadgetOverlayGui(Minecraft minecraft) {
         this.minecraft = minecraft;
-
         biomeResourceMap = new HashMap<>();
-
-        // Create a list of gadgets that have corresponding gui items
-        gadgetGuiItems = new HashMap<>();
-        gadgetGuiItems.put("compass", new CompassGuiItem());
-        gadgetGuiItems.put("depthmeter", new DepthmeterGuiItem());
-        gadgetGuiItems.put("biometer", new BiometerGuiItem());
-        gadgetGuiItems.put("clock", new ClockGuiItem());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -50,20 +42,20 @@ public class GadgetOverlayGui extends AbstractGui {
 
         if (Config.CLIENT.needCurios.get()) {
             // Go through the gadgets the player has on and render the corresponding gui items.
-            ArrayList<String> playerGadgets = getPlayerGadgets();
+            ArrayList<GadgetGuiItem> playerGadgets = getPlayerGadgets();
 
-            // If displaying on the bottom of the screen, reverse the list so the order matches the order of gadgets
+            // If displaying at the bottom of the screen, reverse the list so the order matches the order of gadgets
             // in the player's curio slots
             if (!displayItemsFromTop())
                 Collections.reverse(playerGadgets);
 
-            for (String gadget : playerGadgets) {
-                renderGadgetGui(matrixStack, gadgetGuiItems.get(gadget), position);
+            for (GadgetGuiItem gadgetGuiItem : playerGadgets) {
+                renderGadgetGui(matrixStack, gadgetGuiItem, position);
             }
         }
         else {
             // Just go through all gadget gui items
-            for (GadgetGuiItem gadgetGuiItem : gadgetGuiItems.values()) {
+            for (GadgetGuiItem gadgetGuiItem : allGadgetGuiItems) {
                 renderGadgetGui(matrixStack, gadgetGuiItem, position);
             }
         }
@@ -85,9 +77,8 @@ public class GadgetOverlayGui extends AbstractGui {
         }
     }
 
-    public ResourceLocation getBiomeIconResourceLocation(Biome biome) {
-        return biomeResourceMap.getOrDefault(ForgeRegistries.BIOMES.getKey(biome),
-                new ResourceLocation(Gadgets.MOD_ID, "textures/gui/biome_icons/unknown.png"));
+    public ResourceLocation getBiomeIconResourceLocation(ResourceLocation biomeNameResourceLocation) {
+        return biomeResourceMap.getOrDefault(biomeNameResourceLocation, new ResourceLocation(Gadgets.MOD_ID, "textures/gui/biome_icons/unknown.png"));
     }
 
     public void drawTexture(MatrixStack matrixStack, ResourceLocation texture, int x, int y, int width, int height) {
@@ -104,12 +95,13 @@ public class GadgetOverlayGui extends AbstractGui {
         RenderSystem.pushMatrix();
 
         // Shade gui item background for visibility (if enabled in config)
-        if (Config.CLIENT.gadgetGuiBackground.get())
+        if (Config.CLIENT.gadgetGuiBackground.get()) {
             RenderSystem.enableAlphaTest();
-            fill(matrixStack, position.x,position.y + gadgetGuiItem.getHeight(),
+            fill(matrixStack, position.x, position.y + gadgetGuiItem.getHeight(),
                     position.x + gadgetGuiItem.getWidth(), position.y,
                     GadgetOverlayGui.BackgroundColour);
             RenderSystem.disableAlphaTest();
+        }
 
         gadgetGuiItem.render(matrixStack, minecraft, this, position.x, position.y);
 
@@ -128,25 +120,20 @@ public class GadgetOverlayGui extends AbstractGui {
                 Config.CLIENT.gadgetGuiPosition.get() == Config.GadgetGuiPosition.TOP_RIGHT;
     }
 
-    // Gets a list of gadgets the player currently has equipped
-    private ArrayList<String> getPlayerGadgets() {
-        ClientPlayerEntity player = this.minecraft.player;
+    private ArrayList<GadgetGuiItem> getPlayerGadgets() {
+        ArrayList<GadgetGuiItem> gadgets = new ArrayList<>();
 
-        return new ArrayList<> (CuriosApi.getCuriosHelper().getCuriosHandler(player).map(handler -> {
-            LinkedHashSet<String> _gadgets = new LinkedHashSet<>();
-
-            ICurioStacksHandler stackHandler = handler.getStacksHandler("gadget").get();
-
-            for (int i = 0; i < stackHandler.getSlots(); i++) {
-               ItemStack stack = stackHandler.getStacks().getStackInSlot(i);
-
-               if (!stack.isEmpty()) {
-                   _gadgets.add(stack.getItem().toString());
-               }
+        // Get gui items of all equipped gadgets
+        CuriosApi.getCuriosHelper().getEquippedCurios(minecraft.player).ifPresent(itemHandler -> {
+            for (int i = 0; i < itemHandler.getSlots(); i++) {
+                ItemStack stack = itemHandler.getStackInSlot(i);
+                if (!stack.isEmpty() && stack.getItem() instanceof GadgetItem) {
+                    gadgets.add(((GadgetItem) stack.getItem()).getGuiItem());
+                }
             }
+        });
 
-            return _gadgets;
-        }).orElse(new LinkedHashSet<>()));
+        return gadgets;
     }
 
     private Position getRenderStartPos() {
@@ -157,7 +144,6 @@ public class GadgetOverlayGui extends AbstractGui {
         int startY = (int) (startPos.getY() * minecraft.getWindow().getGuiScaledHeight());
 
         switch (startPos) {
-
             case TOP_LEFT:
                 startX += 1;
                 startY += 1;

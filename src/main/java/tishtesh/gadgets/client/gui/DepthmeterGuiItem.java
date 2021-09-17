@@ -1,6 +1,7 @@
 package tishtesh.gadgets.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import tishtesh.gadgets.core.Config;
 
@@ -22,7 +23,9 @@ public class DepthmeterGuiItem extends GadgetGuiItem{
         String depth = String.format("%.0f", minecraft.player.position().y);
 
         // Render string
+        RenderSystem.pushMatrix();
         minecraft.font.drawShadow(matrixStack, depth, x + 1 + width / 2F - (minecraft.font.width(depth)) / 2F,
                 y + 1 + (getHeight() / 2F - minecraft.font.lineHeight / 2F), GadgetOverlayGui.TextColour);
+        RenderSystem.popMatrix();
     }
 }
