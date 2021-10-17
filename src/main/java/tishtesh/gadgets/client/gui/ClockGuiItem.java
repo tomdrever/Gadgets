@@ -72,7 +72,6 @@ public class ClockGuiItem extends GadgetGuiItem{
         if (hours > 12)
             hours -= 12;
 
-
         return String.format("%d:%02d %s", hours, minutes, period);
     }
 }

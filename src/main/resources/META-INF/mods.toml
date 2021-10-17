@@ -33,9 +33,7 @@ credits="Thanks for this example mod goes to Java" #optional
 # A text field displayed in the mod UI
 authors="tishtesh" #optional
 # The description text for the mod (multi line!) (#mandatory)
-description='''
-Adds curio items to replace the F3 screen
-'''
+description='''Adds curio items to replace the F3 screen'''
 
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.gadgets]] #optional

@@ -3,12 +3,9 @@ package tishtesh.gadgets.client.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 import tishtesh.gadgets.core.Config;
 
-@OnlyIn(Dist.CLIENT)
 public class CompassGuiItem extends GadgetGuiItem {
     @Override
     protected int getHeight() {

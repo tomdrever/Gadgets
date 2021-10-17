@@ -46,7 +46,7 @@ public class Config {
             gadgetGuiWidth = builder
                     .comment("The width of each gadget gui item")
                     .translation(Gadgets.MOD_ID + ".config.gadgetGuiWidth")
-                    .defineInRange("gadgetGuiWidth", 100, 70, 300);
+                    .defineInRange("gadgetGuiWidth", 120, 80, 320);
             hideWhenDebugShown = builder
                     .comment("Should the gadget gui be hidden when the debug info (F3) is shown")
                     .translation(Gadgets.MOD_ID + ".config.hideWhenDebugShown")
