@@ -17,6 +17,7 @@ The biome icons are taken and adapted from [this file](https://gamepedia.cursecd
 
 Supports custom biomes - just put an 18*18 icon in your mod/resource pack in `assets/gadgets/textures/gui/biome_icons/MOD_ID/BIOME_NAME.png`. 
 The mod comes with icons for the biomes from: 
+
 - [Abundance](https://www.curseforge.com/minecraft/mc-mods/abundance)
 - [Atmospheric](https://www.curseforge.com/minecraft/mc-mods/atmospheric)
 - [Autumnity](https://www.curseforge.com/minecraft/mc-mods/autumnity)
@@ -24,6 +25,8 @@ The mod comes with icons for the biomes from:
 - [The Endergetic Expansion](https://www.curseforge.com/minecraft/mc-mods/endergetic)
 - [Environmental](https://www.curseforge.com/minecraft/mc-mods/environmental)
 - [Infernal Expansion](https://www.curseforge.com/minecraft/mc-mods/infernal-expansion)
+- [The Outer End](https://www.curseforge.com/minecraft/mc-mods/the-outer-end) (icons by SirDurpsalot)
+- [Terrestria Reforged](https://www.curseforge.com/minecraft/mc-mods/terrestria-reforged) (icons by SirDurpsalot) (WIP)
 
 
 *NOTE: if an update adds a new gadget, you may want to increase the config option for number of curio slots, as the default is the number of gadgets and the file won't update between versions.*
