@@ -27,13 +27,17 @@ public class GadgetOverlayGui extends AbstractGui {
     private final Minecraft minecraft;
     private final HashMap<ResourceLocation, ResourceLocation> biomeResourceMap;
 
-    private final GadgetGuiItem[] allGadgetGuiItems = new GadgetGuiItem[] {
-            new CompassGuiItem(), new DepthmeterGuiItem(), new BiometerGuiItem(), new ClockGuiItem()
-    };
+    private final HashMap<String, GadgetGuiItem> gadgetGuiItems;
 
     public GadgetOverlayGui(Minecraft minecraft) {
         this.minecraft = minecraft;
         biomeResourceMap = new HashMap<>();
+
+        gadgetGuiItems = new HashMap<>();
+        gadgetGuiItems.put("clock", new ClockGuiItem());
+        gadgetGuiItems.put("compass", new CompassGuiItem());
+        gadgetGuiItems.put("depthmeter", new DepthmeterGuiItem());
+        gadgetGuiItems.put("biometer", new BiometerGuiItem());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -55,7 +59,7 @@ public class GadgetOverlayGui extends AbstractGui {
         }
         else {
             // Just go through all gadget gui items
-            for (GadgetGuiItem gadgetGuiItem : allGadgetGuiItems) {
+            for (GadgetGuiItem gadgetGuiItem : gadgetGuiItems.values()) {
                 renderGadgetGui(matrixStack, gadgetGuiItem, position);
             }
         }
@@ -121,19 +125,21 @@ public class GadgetOverlayGui extends AbstractGui {
     }
 
     private ArrayList<GadgetGuiItem> getPlayerGadgets() {
-        ArrayList<GadgetGuiItem> gadgets = new ArrayList<>();
+        ArrayList<GadgetGuiItem> playerGadgets = new ArrayList<>();
 
         // Get gui items of all equipped gadgets
         CuriosApi.getCuriosHelper().getEquippedCurios(minecraft.player).ifPresent(itemHandler -> {
             for (int i = 0; i < itemHandler.getSlots(); i++) {
                 ItemStack stack = itemHandler.getStackInSlot(i);
                 if (!stack.isEmpty() && stack.getItem() instanceof GadgetItem) {
-                    gadgets.add(((GadgetItem) stack.getItem()).getGuiItem());
+                    for (String gadgetItemName : ((GadgetItem) stack.getItem()).getGuiItems(stack)) {
+                        playerGadgets.add(gadgetGuiItems.get(gadgetItemName));
+                    }
                 }
             }
         });
 
-        return gadgets;
+        return playerGadgets;
     }
 
     private Position getRenderStartPos() {

@@ -2,6 +2,7 @@ package tishtesh.gadgets.core;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import tishtesh.gadgets.client.gui.*;
 import tishtesh.gadgets.common.item.GadgetItem;
+import tishtesh.gadgets.common.recipes.CombinedGadgetRecipe;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 
@@ -78,10 +80,16 @@ public class Gadgets
         @SubscribeEvent
         public static void registerItems(RegistryEvent.Register<Item> event) {
             event.getRegistry().registerAll(
-                    new GadgetItem("biometer", new BiometerGuiItem()),
-                    new GadgetItem("compass", new CompassGuiItem()),
-                    new GadgetItem("depthmeter", new DepthmeterGuiItem()),
-                    new GadgetItem("clock", new ClockGuiItem()));
+                    new GadgetItem("biometer"),
+                    new GadgetItem("compass"),
+                    new GadgetItem("depthmeter"),
+                    new GadgetItem("clock"),
+                    new GadgetItem("combinedgadget"));
+        }
+
+        @SubscribeEvent
+        public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+            event.getRegistry().register(CombinedGadgetRecipe.SERIALIZER);
         }
     }
 }

@@ -1,4 +1,4 @@
 {
   "replace": "false",
-  "values": ["gadgets:compass", "gadgets:depthmeter", "gadgets:biometer", "gadgets:clock"]
+  "values": ["gadgets:compass", "gadgets:depthmeter", "gadgets:biometer", "gadgets:clock", "gadgets:combinedgadget"]
 }
