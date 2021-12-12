@@ -5,14 +5,15 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.AirItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.item.crafting.ShapelessRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import tishtesh.gadgets.common.item.GadgetItem;
 
 import javax.annotation.Nullable;
@@ -22,14 +23,12 @@ import java.util.List;
 import java.util.Set;
 
 // From https://github.com/Deadbeetle/literature-mod/blob/master/src/main/java/com/magnus/literature/recipes/CoveredBookRecipe.java
-public class CombinedGadgetRecipe implements ICraftingRecipe {
+public class CombinedGadgetRecipe extends ShapelessRecipe {
 
     public static final Serializer SERIALIZER = new Serializer();
 
-    private final ResourceLocation id;
-
-    public CombinedGadgetRecipe(ResourceLocation idIn) {
-        id = idIn;
+    public CombinedGadgetRecipe(ResourceLocation id, String group, ItemStack result, NonNullList<Ingredient> ingredients) {
+        super(id, group, result, ingredients);
     }
 
     @Override
@@ -83,6 +82,7 @@ public class CombinedGadgetRecipe implements ICraftingRecipe {
 
         return newCombinedGadget;
     }
+    /**
 
     @Override
     public boolean canCraftInDimensions(int width, int height) {
@@ -94,36 +94,34 @@ public class CombinedGadgetRecipe implements ICraftingRecipe {
         return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("gadgets:combinedgadget")));
     }
 
-    @Override
-    public ResourceLocation getId() {
-        return id;
-    }
+    */
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
         return SERIALIZER;
     }
 
-    private static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CombinedGadgetRecipe> {
+    private static class Serializer extends ShapelessRecipe.Serializer{
 
         Serializer() {
             this.setRegistryName(new ResourceLocation("gadgets", "combinedgadget"));
         }
 
+        
+
         @Override
         public CombinedGadgetRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            return new CombinedGadgetRecipe(recipeId);
+            ShapelessRecipe r = super.fromJson(recipeId, json);
+            return new CombinedGadgetRecipe(r.getId(), r.getGroup(), r.getResultItem(), r.getIngredients());
         }
 
         @Nullable
         @Override
         public CombinedGadgetRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
-            return new CombinedGadgetRecipe(recipeId);
+            ShapelessRecipe r = super.fromNetwork(recipeId, buffer);
+            return new CombinedGadgetRecipe(r.getId(), r.getGroup(), r.getResultItem(), r.getIngredients());
         }
 
-        @Override
-        public void toNetwork(PacketBuffer buffer, CombinedGadgetRecipe recipe) {
-
-        }
+        
     }
 }

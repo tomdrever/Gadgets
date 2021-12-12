@@ -66,7 +66,7 @@ public class Config {
                     .comment("The number of slots for gadgets the player has")
                     .translation(Gadgets.MOD_ID + ".config.gadgetSlots")
                     .worldRestart()
-                    .defineInRange("gadgetSlots", 4, 0, 5);
+                    .defineInRange("gadgetSlots", 2, 0, 5);
 
             builder.pop();
         }
