@@ -22,7 +22,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-// From https://github.com/Deadbeetle/literature-mod/blob/master/src/main/java/com/magnus/literature/recipes/CoveredBookRecipe.java
 public class CombinedGadgetRecipe extends ShapelessRecipe {
 
     public static final Serializer SERIALIZER = new Serializer();
@@ -82,19 +81,6 @@ public class CombinedGadgetRecipe extends ShapelessRecipe {
 
         return newCombinedGadget;
     }
-    /**
-
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 4;
-    }
-
-    @Override
-    public ItemStack getResultItem() {
-        return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("gadgets:combinedgadget")));
-    }
-
-    */
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
@@ -106,8 +92,6 @@ public class CombinedGadgetRecipe extends ShapelessRecipe {
         Serializer() {
             this.setRegistryName(new ResourceLocation("gadgets", "combinedgadget"));
         }
-
-        
 
         @Override
         public CombinedGadgetRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
@@ -121,7 +105,5 @@ public class CombinedGadgetRecipe extends ShapelessRecipe {
             ShapelessRecipe r = super.fromNetwork(recipeId, buffer);
             return new CombinedGadgetRecipe(r.getId(), r.getGroup(), r.getResultItem(), r.getIngredients());
         }
-
-        
     }
 }

@@ -6,7 +6,7 @@
 - Reduced default number of gadgets to 2 to encourage but not enforce combining gadgets
 - Updated item textures and introduced new biome icons thanks to SirDurpsalot
 
-![Gadget items - compass, depthmeter and biometer]( https://i.imgur.com/UIZ3qTX.png "Gadget items - the personal compass, the depthmeter and the biometer")
+![Gadget items - compass, depthmeter and biometer]( https://i.imgur.com/UIZ3qTX.png "Gadget items - the clock, combined gadget, biometer, personal compass and depthmeter")
 
 ***
 
