@@ -1,18 +1,18 @@
 package tishtesh.gadgets.common.recipes;
 
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.AirItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ShapelessRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.AirItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import tishtesh.gadgets.common.item.GadgetItem;
 
@@ -31,7 +31,7 @@ public class CombinedGadgetRecipe extends ShapelessRecipe {
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level level) {
         int gadgets = 0;
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
@@ -46,7 +46,7 @@ public class CombinedGadgetRecipe extends ShapelessRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         ItemStack gadget1 = ItemStack.EMPTY;
         ItemStack gadget2 = ItemStack.EMPTY;
 
@@ -73,7 +73,7 @@ public class CombinedGadgetRecipe extends ShapelessRecipe {
 
         ItemStack newCombinedGadget = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("gadgets:combinedgadget")));
 
-        CompoundNBT gadgetsNBT = new CompoundNBT();
+        CompoundTag gadgetsNBT = new CompoundTag();
         for (int i = 0; i < guiItems.size(); i++) {
             gadgetsNBT.putInt(guiItems.get(i), i);
         }
@@ -83,7 +83,7 @@ public class CombinedGadgetRecipe extends ShapelessRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return SERIALIZER;
     }
 
@@ -101,7 +101,7 @@ public class CombinedGadgetRecipe extends ShapelessRecipe {
 
         @Nullable
         @Override
-        public CombinedGadgetRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public CombinedGadgetRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             ShapelessRecipe r = super.fromNetwork(recipeId, buffer);
             return new CombinedGadgetRecipe(r.getId(), r.getGroup(), r.getResultItem(), r.getIngredients());
         }
