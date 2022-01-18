@@ -50,12 +50,14 @@ public class ClockGuiItem extends GadgetGuiItem{
         String dayString = String.format("Day %d", day);
 
         // Render time string
+        stack.pushPose();
         minecraft.font.drawShadow(stack, timeString, x + 1 + width / 2F - minecraft.font.width(timeString) / 2F,
                 y + 3, GadgetOverlayGui.TextColour);
+        stack.popPose();
 
         // Render day (smaller)
         stack.pushPose();
-        //GL11.glScalef(GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.SmallTextSF);
+        stack.scale(GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.SmallTextSF);
         minecraft.font.drawShadow(stack, dayString, (x + 2 + width / 2F - minecraft.font.width(dayString) / 2F) / GadgetOverlayGui.SmallTextSF,
                 (y + 1 + getHeight() * 0.55F) / GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.TextColour);
         stack.popPose();

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -62,30 +63,33 @@ public class GadgetOverlayGui extends GuiComponent {
     }
 
     public void drawTexture(PoseStack stack, ResourceLocation texture, int x, int y, int width, int height) {
-        minecraft.getTextureManager().bindForSetup(texture);
+        // Wake up honey new code for rendering a texture just dropped
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, texture);
+
+        stack.pushPose();
         blit(stack, x, y, 0, 0, 0, width, height, width, height);
+        stack.popPose();
     }
 
     private void renderGadgetGui(PoseStack stack, GadgetGuiItem gadgetGuiItem, Position position) {
-        // If gadgetGuiPosition is along the bottom of the screen, need to accomodate for each gadgetgui's height
+        // If gadgetGuiPosition is along the bottom of the screen, need to accommodate for each gadgetgui's height
         // before it's rendered
         if (!displayItemsFromTop())
             position.y -= gadgetGuiItem.getHeight();
 
-        //stack.pushPose();
-
         // Shade gui item background for visibility (if enabled in config)
         if (Config.CLIENT.gadgetGuiBackground.get()) {
-            //RenderSystem.enableAlphaTest();
+            stack.pushPose();
             fill(stack, position.x, position.y + gadgetGuiItem.getHeight(),
                     position.x + gadgetGuiItem.getWidth(), position.y,
                     GadgetOverlayGui.BackgroundColour);
-            //RenderSystem.disableAlphaTest();
+            stack.popPose();
         }
 
+        // Let the gadget gui item handle its own rendering
         gadgetGuiItem.render(stack, minecraft, this, position.x, position.y);
-
-        //stack.popPose();
 
         // Render next item below if gadgetGuiPosition is along the top, render next item above if along the bottom
         if (displayItemsFromTop())

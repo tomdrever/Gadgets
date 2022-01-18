@@ -34,6 +34,7 @@ public class Gadgets
 
         // Register ourselves for server and other game events we are interested in
         //MinecraftForge.EVENT_BUS.register(this);
+        Minecraft.getInstance().options.reducedDebugInfo = false;
 
         // Register config
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
