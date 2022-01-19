@@ -1,9 +1,9 @@
 package tishtesh.gadgets.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import tishtesh.gadgets.core.Config;
 
@@ -15,7 +15,7 @@ public class ClockGuiItem extends GadgetGuiItem{
     }
 
     @Override
-    protected void render(MatrixStack matrixStack, Minecraft minecraft, GadgetOverlayGui gui, int x, int y) {
+    protected void render(PoseStack stack, Minecraft minecraft, GadgetOverlayGui gui, int x, int y) {
         int width = getWidth();
         if (Config.CLIENT.gadgetGuiIcons.get()) {
             ResourceLocation icon;
@@ -32,7 +32,7 @@ public class ClockGuiItem extends GadgetGuiItem{
                     icon = Icons.OverworldClockGuiIcon;
                     break;
             }
-            gui.drawTexture(matrixStack, icon, x + 1, y + (getHeight() / 2) - 9, 18, 18);
+            gui.drawTexture(stack, icon, x + 1, y + (getHeight() / 2) - 9, 18, 18);
             width += 18;
         }
 
@@ -50,15 +50,17 @@ public class ClockGuiItem extends GadgetGuiItem{
         String dayString = String.format("Day %d", day);
 
         // Render time string
-        minecraft.font.drawShadow(matrixStack, timeString, x + 1 + width / 2F - minecraft.font.width(timeString) / 2F,
+        stack.pushPose();
+        minecraft.font.drawShadow(stack, timeString, x + 1 + width / 2F - minecraft.font.width(timeString) / 2F,
                 y + 3, GadgetOverlayGui.TextColour);
+        stack.popPose();
 
         // Render day (smaller)
-        RenderSystem.pushMatrix();
-        GL11.glScalef(GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.SmallTextSF);
-        minecraft.font.drawShadow(matrixStack, dayString, (x + 2 + width / 2F - minecraft.font.width(dayString) / 2F) / GadgetOverlayGui.SmallTextSF,
+        stack.pushPose();
+        stack.scale(GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.SmallTextSF);
+        minecraft.font.drawShadow(stack, dayString, (x + 2 + width / 2F - minecraft.font.width(dayString) / 2F) / GadgetOverlayGui.SmallTextSF,
                 (y + 1 + getHeight() * 0.55F) / GadgetOverlayGui.SmallTextSF, GadgetOverlayGui.TextColour);
-        RenderSystem.popMatrix();
+        stack.popPose();
     }
 
     private String formatTime24Hour(int hours, int minutes) {

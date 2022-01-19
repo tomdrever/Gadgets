@@ -1,6 +1,6 @@
 package tishtesh.gadgets.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import tishtesh.gadgets.core.Config;
 
@@ -10,5 +10,5 @@ public abstract class GadgetGuiItem {
         return Config.CLIENT.gadgetGuiWidth.get();
     }
 
-    protected abstract void render(MatrixStack matrixStack, Minecraft minecraft, GadgetOverlayGui gui, int x, int y);
+    protected abstract void render(PoseStack stack, Minecraft minecraft, GadgetOverlayGui gui, int x, int y);
 }

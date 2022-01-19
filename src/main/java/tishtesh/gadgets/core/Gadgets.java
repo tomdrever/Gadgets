@@ -1,9 +1,9 @@
 package tishtesh.gadgets.core;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -34,6 +34,7 @@ public class Gadgets
 
         // Register ourselves for server and other game events we are interested in
         //MinecraftForge.EVENT_BUS.register(this);
+        Minecraft.getInstance().options.reducedDebugInfo = false;
 
         // Register config
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
@@ -71,7 +72,7 @@ public class Gadgets
         @SubscribeEvent
         public static void onPostTexturesStitched(TextureStitchEvent.Post event) {
             // Load textures into the biome resource map
-            guiRenderHandler.gui.generateBiomeResourceMap();
+            Icons.generateBiomeResourceMap();
         }
     }
 
@@ -88,7 +89,7 @@ public class Gadgets
         }
 
         @SubscribeEvent
-        public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+        public static void registerRecipeSerializers(RegistryEvent.Register<RecipeSerializer<?>> event) {
             event.getRegistry().register(CombinedGadgetRecipe.SERIALIZER);
         }
     }

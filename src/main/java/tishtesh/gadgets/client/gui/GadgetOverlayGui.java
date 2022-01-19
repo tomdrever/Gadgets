@@ -1,37 +1,34 @@
 package tishtesh.gadgets.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
 import tishtesh.gadgets.common.item.GadgetItem;
 import tishtesh.gadgets.core.Config;
-import tishtesh.gadgets.core.Gadgets;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class GadgetOverlayGui extends AbstractGui {
+public class GadgetOverlayGui extends GuiComponent {
     public static int BackgroundColour = 0x40000000;
     public final static int TextColour = 0xFFFFFFFF;
 
     public final static float SmallTextSF = 0.9f;
 
     private final Minecraft minecraft;
-    private final HashMap<ResourceLocation, ResourceLocation> biomeResourceMap;
 
     private final HashMap<String, GadgetGuiItem> gadgetGuiItems;
 
     public GadgetOverlayGui(Minecraft minecraft) {
         this.minecraft = minecraft;
-        biomeResourceMap = new HashMap<>();
 
         gadgetGuiItems = new HashMap<>();
         gadgetGuiItems.put("clock", new ClockGuiItem());
@@ -41,7 +38,7 @@ public class GadgetOverlayGui extends AbstractGui {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void render(MatrixStack matrixStack) {
+    public void render(PoseStack stack) {
         Position position = getRenderStartPos();
 
         if (Config.CLIENT.needCurios.get()) {
@@ -54,62 +51,45 @@ public class GadgetOverlayGui extends AbstractGui {
                 Collections.reverse(playerGadgets);
 
             for (GadgetGuiItem gadgetGuiItem : playerGadgets) {
-                renderGadgetGui(matrixStack, gadgetGuiItem, position);
+                renderGadgetGui(stack, gadgetGuiItem, position);
             }
         }
         else {
             // Just go through all gadget gui items
             for (GadgetGuiItem gadgetGuiItem : gadgetGuiItems.values()) {
-                renderGadgetGui(matrixStack, gadgetGuiItem, position);
+                renderGadgetGui(stack, gadgetGuiItem, position);
             }
         }
     }
 
-    /**
-     * Should be called when resources are loaded
-     * Creates a map of biomename to biomeicon, so the biometer gadget gui can quickly map the name it gets from the player
-     * to an icon
-     */
-    public void generateBiomeResourceMap() {
-        biomeResourceMap.clear();
-        for (ResourceLocation biomeNameResourceLocation : ForgeRegistries.BIOMES.getKeys()) {
-            ResourceLocation biomeIconResourceLocation = new ResourceLocation(Gadgets.MOD_ID,
-                    String.format("textures/gui/biome_icons/%s/%s.png", biomeNameResourceLocation.toString().split(":")));
+    public void drawTexture(PoseStack stack, ResourceLocation texture, int x, int y, int width, int height) {
+        // Wake up honey new code for rendering a texture just dropped
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, texture);
 
-            if (minecraft.getResourceManager().hasResource(biomeIconResourceLocation))
-                biomeResourceMap.put(biomeNameResourceLocation, biomeIconResourceLocation);
-        }
+        stack.pushPose();
+        blit(stack, x, y, 0, 0, 0, width, height, width, height);
+        stack.popPose();
     }
 
-    public ResourceLocation getBiomeIconResourceLocation(ResourceLocation biomeNameResourceLocation) {
-        return biomeResourceMap.getOrDefault(biomeNameResourceLocation, new ResourceLocation(Gadgets.MOD_ID, "textures/gui/biome_icons/unknown.png"));
-    }
-
-    public void drawTexture(MatrixStack matrixStack, ResourceLocation texture, int x, int y, int width, int height) {
-        minecraft.getTextureManager().bind(texture);
-        blit(matrixStack, x, y, 0, 0, 0, width, height, width, height);
-    }
-
-    private void renderGadgetGui(MatrixStack matrixStack, GadgetGuiItem gadgetGuiItem, Position position) {
-        // If gadgetGuiPosition is along the bottom of the screen, need to accomodate for each gadgetgui's height
+    private void renderGadgetGui(PoseStack stack, GadgetGuiItem gadgetGuiItem, Position position) {
+        // If gadgetGuiPosition is along the bottom of the screen, need to accommodate for each gadgetgui's height
         // before it's rendered
         if (!displayItemsFromTop())
             position.y -= gadgetGuiItem.getHeight();
 
-        RenderSystem.pushMatrix();
-
         // Shade gui item background for visibility (if enabled in config)
         if (Config.CLIENT.gadgetGuiBackground.get()) {
-            RenderSystem.enableAlphaTest();
-            fill(matrixStack, position.x, position.y + gadgetGuiItem.getHeight(),
+            stack.pushPose();
+            fill(stack, position.x, position.y + gadgetGuiItem.getHeight(),
                     position.x + gadgetGuiItem.getWidth(), position.y,
                     GadgetOverlayGui.BackgroundColour);
-            RenderSystem.disableAlphaTest();
+            stack.popPose();
         }
 
-        gadgetGuiItem.render(matrixStack, minecraft, this, position.x, position.y);
-
-        RenderSystem.popMatrix();
+        // Let the gadget gui item handle its own rendering
+        gadgetGuiItem.render(stack, minecraft, this, position.x, position.y);
 
         // Render next item below if gadgetGuiPosition is along the top, render next item above if along the bottom
         if (displayItemsFromTop())
