@@ -32,10 +32,6 @@ public class Gadgets
         // Register the enqueueIMC method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
 
-        // Register ourselves for server and other game events we are interested in
-        //MinecraftForge.EVENT_BUS.register(this);
-        Minecraft.getInstance().options.reducedDebugInfo = false;
-
         // Register config
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
         modLoadingContext.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC);

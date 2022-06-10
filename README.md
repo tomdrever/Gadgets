@@ -1,8 +1,6 @@
 # Gadgets #
 
-**Updated to 1.16.5!**
-
-**Beta versions for 1.17.1 and 1.18.1!**
+**Updated to 1.18.2!**
 
 - Introduced ability to combine gadgets via crafting
 - Reduced default number of gadgets to 2 to encourage but not enforce combining gadgets
@@ -15,7 +13,17 @@
 Adds items that can be equipped (using the [Curios API](https://www.curseforge.com/minecraft/mc-mods/curios)) to show the player's position and biome, to replace the F3 debug info. 
 Items in curios slots can be rearranged to your liking, and the number of available gadget slots can be changed in config.
 
-![Gadget gui](https://imgur.com/90Bvzfu.jpg "Gadget information")
+![Gadget gui](https://imgur.com/90Bvzfu.jpg "Gadget GUI display")
+
+Current Gadget items:
+
+- Biometer: shows current biome
+- Timepiece: shows current time and day
+- Personal Compass: shows the direction the player is facing and their position (X, Z)
+- Depthmeter: shows the player's current Y level
+- (If [Serene Seasons](https://www.curseforge.com/minecraft/mc-mods/serene-seasons) installed) Personal Calendar: shows the current season and sub-season
+
+***
 
 Config options also let you change the position of the gadget gui, and whether you need to have the gadgets equipped.
 
